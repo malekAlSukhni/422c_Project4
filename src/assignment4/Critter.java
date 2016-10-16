@@ -1,19 +1,17 @@
-/* CRITTERS Critter.java
+/* CRITTERS <MyClass.java>
  * EE422C Project 4 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
- * Slip days used: <0>
+ * Robert Bolt
+ * rob329
+ * 16465
+ * Malek Al Sukhni
+ * mha664
+ * 16470
+ * Slip days used: 0
  * Fall 2016
  */
 package assignment4;
 
 import java.util.List;
-import java.util.class; 
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -24,6 +22,7 @@ public abstract class Critter {
 	private static String myPackage;
 	private static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
+	private static List<Critter> runawayList;
 
 	// Gets the package name. This assumes that Critter and its subclasses are
 	// all in the same package.
@@ -59,172 +58,181 @@ public abstract class Critter {
 	private int y_coord;
 
 	protected final void walk(int direction) {
-		switch (direction) {
-		// case 0 moving to the right
-		case 0:
-			x_coord += 1;
-			x_coord = x_coord % Params.world_width;
-			break;
-		// case 1 moving up and to the right
-		case 1:
-			x_coord += 1;
-			x_coord = x_coord % Params.world_width;
-			y_coord += 1;
-			y_coord = y_coord % Params.world_height;
-			break;
-		// case 2 moving up
-		case 2:
-			y_coord += 1;
-			y_coord = y_coord % Params.world_height;
-			break;
-		// case 3 moving up and to the left
-		case 3:
-			if (x_coord == 0) {
-				x_coord = Params.world_width - 1;
-			} else {
-				x_coord -= 1;
+		if (!runawayList.contains(this)) {
+			switch (direction) {
+			// case 0 moving to the right
+			case 0:
+				x_coord += 1;
+				x_coord = x_coord % Params.world_width;
+				break;
+			// case 1 moving up and to the right
+			case 1:
+				x_coord += 1;
+				x_coord = x_coord % Params.world_width;
+				y_coord += 1;
+				y_coord = y_coord % Params.world_height;
+				break;
+			// case 2 moving up
+			case 2:
+				y_coord += 1;
+				y_coord = y_coord % Params.world_height;
+				break;
+			// case 3 moving up and to the left
+			case 3:
+				if (x_coord == 0) {
+					x_coord = Params.world_width - 1;
+				} else {
+					x_coord -= 1;
+				}
+				y_coord += 1;
+				y_coord = y_coord % Params.world_height;
+				break;
+			// case 4 moving left
+			case 4:
+				if (x_coord == 0) {
+					x_coord = Params.world_width - 1;
+				} else {
+					x_coord -= 1;
+				}
+				break;
+			// case 5 moving down and to the left
+			case 5:
+				if (x_coord == 0) {
+					x_coord = Params.world_width - 1;
+				} else {
+					x_coord -= 1;
+				}
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 1;
+				} else {
+					y_coord -= 1;
+				}
+				break;
+			// case 6 moving down
+			case 6:
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 1;
+				} else {
+					y_coord -= 1;
+				}
+				break;
+			// case 7 moving down and to the right
+			case 7:
+				x_coord += 1;
+				x_coord = x_coord % Params.world_width;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 1;
+				} else {
+					y_coord -= 1;
+				}
+				break;
 			}
-			y_coord += 1;
-			y_coord = y_coord % Params.world_height;
-			break;
-		// case 4 moving left
-		case 4:
-			if (x_coord == 0) {
-				x_coord = Params.world_width - 1;
-			} else {
-				x_coord -= 1;
-			}
-			break;
-		// case 5 moving down and to the left
-		case 5:
-			if (x_coord == 0) {
-				x_coord = Params.world_width - 1;
-			} else {
-				x_coord -= 1;
-			}
-			if (y_coord == 0) {
-				y_coord = Params.world_height - 1;
-			} else {
-				y_coord -= 1;
-			}
-			break;
-		// case 6 moving down
-		case 6:
-			if (y_coord == 0) {
-				y_coord = Params.world_height - 1;
-			} else {
-				y_coord -= 1;
-			}
-			break;
-		// case 7 moving down and to the right
-		case 7:
-			x_coord += 1;
-			x_coord = x_coord % Params.world_width;
-			if (y_coord == 0) {
-				y_coord = Params.world_height - 1;
-			} else {
-				y_coord -= 1;
-			}
-			break;
+			runawayList.add(this);
 		}
+		energy -= Params.walk_energy_cost;
 	}
 
 	protected final void run(int direction) {
-		switch (direction) {
-		// case 0 moving to the right
-		case 0:
-			x_coord += 2;
-			x_coord = x_coord % Params.world_width;
-			break;
-		// case 1 moving up and to the right
-		case 1:
-			x_coord += 2;
-			x_coord = x_coord % Params.world_width;
-			y_coord += 2;
-			y_coord = y_coord % Params.world_height;
-			break;
-		// case 2 moving up
-		case 2:
-			y_coord += 2;
-			y_coord = y_coord % Params.world_height;
-			break;
-		// case 3 moving up and to the left
-		case 3:
-			if (x_coord == 0) {
-				x_coord = Params.world_width - 2;
-			} else {
-				if (x_coord == 1) {
-					x_coord = Params.world_width - 1;
+		if (!runawayList.contains(this)) {
+			switch (direction) {
+			// case 0 moving to the right
+			case 0:
+				x_coord += 2;
+				x_coord = x_coord % Params.world_width;
+				break;
+			// case 1 moving up and to the right
+			case 1:
+				x_coord += 2;
+				x_coord = x_coord % Params.world_width;
+				y_coord += 2;
+				y_coord = y_coord % Params.world_height;
+				break;
+			// case 2 moving up
+			case 2:
+				y_coord += 2;
+				y_coord = y_coord % Params.world_height;
+				break;
+			// case 3 moving up and to the left
+			case 3:
+				if (x_coord == 0) {
+					x_coord = Params.world_width - 2;
 				} else {
-					x_coord -= 2;
+					if (x_coord == 1) {
+						x_coord = Params.world_width - 1;
+					} else {
+						x_coord -= 2;
+					}
 				}
-			}
-			y_coord += 2;
-			y_coord = y_coord % Params.world_height;
-			break;
-		// case 4 moving left
-		case 4:
-			if (x_coord == 0) {
-				x_coord = Params.world_width - 2;
-			} else {
-				if (x_coord == 1) {
-					x_coord = Params.world_width - 1;
+				y_coord += 2;
+				y_coord = y_coord % Params.world_height;
+				break;
+			// case 4 moving left
+			case 4:
+				if (x_coord == 0) {
+					x_coord = Params.world_width - 2;
 				} else {
-					x_coord -= 2;
+					if (x_coord == 1) {
+						x_coord = Params.world_width - 1;
+					} else {
+						x_coord -= 2;
+					}
 				}
-			}
-			break;
-		// case 5 moving down and to the left
-		case 5:
-			if (x_coord == 0) {
-				x_coord = Params.world_width - 2;
-			} else {
-				if (x_coord == 1) {
-					x_coord = Params.world_width - 1;
+				break;
+			// case 5 moving down and to the left
+			case 5:
+				if (x_coord == 0) {
+					x_coord = Params.world_width - 2;
 				} else {
-					x_coord -= 2;
+					if (x_coord == 1) {
+						x_coord = Params.world_width - 1;
+					} else {
+						x_coord -= 2;
+					}
 				}
-			}
-			if (y_coord == 0) {
-				y_coord = Params.world_height - 2;
-			} else {
-				if (y_coord == 1) {
-					y_coord = Params.world_height - 1;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 2;
 				} else {
-					y_coord -= 2;
+					if (y_coord == 1) {
+						y_coord = Params.world_height - 1;
+					} else {
+						y_coord -= 2;
+					}
 				}
-			}
-			break;
-		// case 6 moving down
-		case 6:
-			if (y_coord == 0) {
-				y_coord = Params.world_height - 2;
-			} else {
-				if (y_coord == 1) {
-					y_coord = Params.world_height - 1;
+				break;
+			// case 6 moving down
+			case 6:
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 2;
 				} else {
-					y_coord -= 2;
+					if (y_coord == 1) {
+						y_coord = Params.world_height - 1;
+					} else {
+						y_coord -= 2;
+					}
 				}
-			}
-			break;
-		// case 7 moving down and to the right
-		case 7:
-			x_coord += 2;
-			x_coord = x_coord % Params.world_width;
-			if (y_coord == 0) {
-				y_coord = Params.world_height - 2;
-			} else {
-				if (y_coord == 1) {
-					y_coord = Params.world_height - 1;
+				break;
+			// case 7 moving down and to the right
+			case 7:
+				x_coord += 2;
+				x_coord = x_coord % Params.world_width;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 2;
 				} else {
-					y_coord -= 2;
+					if (y_coord == 1) {
+						y_coord = Params.world_height - 1;
+					} else {
+						y_coord -= 2;
+					}
 				}
+				break;
 			}
-			break;
+			runawayList.add(this);
 		}
+		energy -= Params.run_energy_cost;
 	}
 
 	protected final void reproduce(Critter offspring, int direction) {
+
 	}
 
 	public abstract void doTimeStep();
@@ -243,19 +251,18 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
-		try{
+		try {
 			Critter test;
-			Class c = c.forName(critter_class_name);
+			Class c = Class.forName(critter_class_name);
 			test = (Critter) c.newInstance();
 			test.energy = Params.start_energy;
-			test.x_coord = getRandomInt(Params.world_width -1);
-			test.y_coord = getRandomInt(Params.world_height -1);
+			test.x_coord = getRandomInt(Params.world_width - 1);
+			test.y_coord = getRandomInt(Params.world_height - 1);
 			population.add(test);
-		}		
-		catch (Exception e){
+		} catch (Exception e) {
 			throw new InvalidCritterException(critter_class_name);
 		}
-		
+
 	}
 
 	/**
@@ -268,7 +275,6 @@ public abstract class Critter {
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
 		List<Critter> result = new java.util.ArrayList<Critter>();
-
 		return result;
 	}
 
@@ -360,8 +366,114 @@ public abstract class Critter {
 	}
 
 	public static void worldTimeStep() {
+		runawayList = new java.util.ArrayList<Critter>();
+		// executing all time steps for critters
+		for (Critter x : population) {
+			x.doTimeStep();
+		}
+		resolveConflicts();
+
 	}
 
 	public static void displayWorld() {
+
+	}
+
+	private static void resolveConflicts() {
+
+		for (int index = 0; index < population.size(); index++) {
+			if (population.get(index).energy <= 0) {
+				// if this critter is dead then check the next
+				population.remove(index);
+				index--; // this minus 1 is because when you remove the critter
+							// the size will get smaller so you have to go back
+							// an index
+			} else {
+				for (int index2 = index + 1; index2 < population.size(); index2++) {
+					if (population.get(index2).energy <= 0) {
+						// if this critter is dead then check the previous
+						// critter again
+						population.remove(index2);
+						index--; // look at comment for minus 1 above
+						break;
+					}
+					if (population.get(index).x_coord == population.get(index2).x_coord
+							&& population.get(index).y_coord == population.get(index2).y_coord) {
+						// resolving fight
+						Critter critter1 = population.get(index);
+						Critter critter2 = population.get(index2);
+						Boolean fight1 = critter1.fight(critter2.toString());
+						Boolean fight2 = critter2.fight(critter1.toString());
+						int fightRoll1 = 0;
+						int fightRoll2 = 0;
+						// neither want to fight
+						if (!fight1 && !fight2) {
+							int xcoordTemp, ycoordTemp;
+							if (!runawayList.contains(critter1)) {
+								xcoordTemp = critter1.x_coord;
+								ycoordTemp = critter1.y_coord;
+								critter1.run(getRandomInt(7));
+								for (Critter x : population) {
+									if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
+										critter1.x_coord = xcoordTemp;
+										critter1.y_coord = ycoordTemp;
+										break;
+									}
+								}
+							}
+							if (!runawayList.contains(critter2)) {
+								xcoordTemp = critter2.x_coord;
+								ycoordTemp = critter2.y_coord;
+								critter2.run(getRandomInt(7));
+								for (Critter x : population) {
+									if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
+										critter2.x_coord = xcoordTemp;
+										critter2.y_coord = ycoordTemp;
+										break;
+									}
+								}
+							}
+							if (critter1.x_coord == critter2.x_coord && critter1.y_coord == critter2.y_coord) {
+								fight1 = true;
+							}
+						} else {
+							// both want to fight
+							if (fight1 && fight2) {
+								fightRoll1 = getRandomInt(critter1.energy);
+								fightRoll2 = getRandomInt(critter2.energy);
+							}
+							// only one wants to fight
+							if (!fight1 && fight2) {
+								fightRoll1 = 0;
+								fightRoll2 = getRandomInt(critter2.energy);
+							}
+							if (fight1 && !fight2) {
+								fightRoll1 = getRandomInt(critter1.energy);
+								fightRoll2 = 0;
+							}
+						}
+						// winner reaps rewards
+						if ((fightRoll1 >= fightRoll2) && (fight1 || fight2)) {
+							if (critter2.energy > 0) {
+								critter1.energy += critter2.energy / 2;
+							}
+							population.remove(index2);
+						} else {
+							if (fight1 || fight2) {
+								if (critter1.energy > 0) {
+									critter2.energy += critter1.energy / 2;
+								}
+								population.remove(index);
+							}
+						}
+						// setting index to zero because you have to re-check
+						// the critters to make sure none are at zero now and to
+						// resolve new conflicts
+						index = 0;
+						break;
+					}
+				}
+			}
+		}
 	}
 }
