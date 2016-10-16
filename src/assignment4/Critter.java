@@ -1,19 +1,17 @@
-/* CRITTERS Critter.java
+/* CRITTERS <MyClass.java>
  * EE422C Project 4 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
- * Slip days used: <0>
+ * Robert Bolt
+ * rob329
+ * 16465
+ * Malek Al Sukhni
+ * mha664
+ * 16470
+ * Slip days used: 0
  * Fall 2016
  */
 package assignment4;
 
 import java.util.List;
-import java.util.class; 
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -127,6 +125,7 @@ public abstract class Critter {
 			}
 			break;
 		}
+		energy -= Params.walk_energy_cost;
 	}
 
 	protected final void run(int direction) {
@@ -222,6 +221,7 @@ public abstract class Critter {
 			}
 			break;
 		}
+		energy -= Params.run_energy_cost;
 	}
 
 	protected final void reproduce(Critter offspring, int direction) {
@@ -243,19 +243,18 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
-		try{
+		try {
 			Critter test;
-			Class c = c.forName(critter_class_name);
+			Class c = Class.forName(critter_class_name);
 			test = (Critter) c.newInstance();
 			test.energy = Params.start_energy;
-			test.x_coord = getRandomInt(Params.world_width -1);
-			test.y_coord = getRandomInt(Params.world_height -1);
+			test.x_coord = getRandomInt(Params.world_width - 1);
+			test.y_coord = getRandomInt(Params.world_height - 1);
 			population.add(test);
-		}		
-		catch (Exception e){
+		} catch (Exception e) {
 			throw new InvalidCritterException(critter_class_name);
 		}
-		
+
 	}
 
 	/**
@@ -268,7 +267,6 @@ public abstract class Critter {
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
 		List<Critter> result = new java.util.ArrayList<Critter>();
-
 		return result;
 	}
 
@@ -360,6 +358,72 @@ public abstract class Critter {
 	}
 
 	public static void worldTimeStep() {
+		
+		//executing all time steps for critters
+		for (Critter x : population) {
+			x.doTimeStep();
+		}
+		for (int index = 0; index < population.size(); index++) {
+			if (population.get(index).energy == 0) {
+				// if this critter is dead then check the next
+				population.remove(index);
+				index--; // this minus 1 is because when you remove the critter
+							// the size will get smaller so you have to go back
+							// an index
+			} else {
+				for (int index2 = index + 1; index2 < population.size(); index2++) {
+					if (population.get(index2).energy == 0) {
+						// if this critter is dead then check the previous
+						// critter again
+						population.remove(index2);
+						index--;	//look at comment for minus 1 above
+						break;
+					}
+					if (population.get(index).x_coord == population.get(index2).x_coord
+							&& population.get(index).y_coord == population.get(index2).y_coord) {
+						// resolving fight
+						Critter critter1 = population.get(index);
+						Critter critter2 = population.get(index2);
+						Boolean fight1 = critter1.fight(critter2.toString());
+						Boolean fight2 = critter2.fight(critter1.toString());
+						int fightRoll1 = 1;
+						int fightRoll2 = 0;
+						// both want to fight
+						if (fight1 && fight2) {
+							fightRoll1 = getRandomInt(critter1.energy);
+							fightRoll2 = getRandomInt(critter2.energy);
+						}
+						// only one wants to fight
+						if (!fight1 && fight2) {
+							fightRoll1 = 0;
+							fightRoll2 = getRandomInt(critter2.energy);
+						}
+						if (fight1 && !fight2) {
+							fightRoll1 = getRandomInt(critter1.energy);
+							fightRoll2 = 0;
+						}
+						// neither want to fight
+						if (!fight1 && !fight2) {
+							critter1.run(getRandomInt(7));
+							critter2.run(getRandomInt(7));
+						}
+						// winner reaps rewards
+						if (fightRoll1 >= fightRoll2) {
+							critter1.energy += critter2.energy / 2;
+							population.remove(index2);
+						} else {
+							critter2.energy += critter1.energy / 2;
+							population.remove(index);
+						}
+						// setting index to zero because you have to re-check
+						// the critters to make sure none are at zero now and to
+						// resolve new conflicts
+						index = 0;
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	public static void displayWorld() {
