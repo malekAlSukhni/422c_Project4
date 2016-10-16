@@ -11,6 +11,7 @@
  */
 package assignment4;
 
+import java.util.Collections;
 import java.util.List;
 
 /* see the PDF for descriptions of the methods and fields in this class
@@ -232,7 +233,21 @@ public abstract class Critter {
 	}
 
 	protected final void reproduce(Critter offspring, int direction) {
-
+		if (this.energy >= Params.min_reproduce_energy) {
+			offspring.energy = this.energy / 2;
+			if (this.energy % 2 == 0) {
+				this.energy = this.energy / 2;
+			} 
+			else {
+				this.energy = offspring.energy + 1;
+			}
+			offspring.x_coord = this.x_coord;
+			offspring.y_coord = this.y_coord;
+			offspring.walk(direction);
+			offspring.energy += Params.walk_energy_cost;
+			babies.add(offspring);
+		}
+		
 	}
 
 	public abstract void doTimeStep();
@@ -372,7 +387,11 @@ public abstract class Critter {
 			x.doTimeStep();
 		}
 		resolveConflicts();
-
+		for(Critter x: babies){
+			population.add(x);
+			babies.remove(x);
+		}
+		
 	}
 
 	public static void displayWorld() {
