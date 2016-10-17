@@ -23,7 +23,7 @@ public abstract class Critter {
 	private static String myPackage;
 	private static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
-	private static List<Critter> runawayList;
+	private static List<Critter> runawayList = new java.util.ArrayList<Critter>();
 
 	// Gets the package name. This assumes that Critter and its subclasses are
 	// all in the same package.
@@ -378,10 +378,10 @@ public abstract class Critter {
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
+		population.clear();
 	}
 
-	public static void worldTimeStep() {
-		runawayList = new java.util.ArrayList<Critter>();
+	public static void worldTimeStep() throws InvalidCritterException {
 		// executing all time steps for critters
 		for (Critter x : population) {
 			x.doTimeStep();
@@ -389,13 +389,39 @@ public abstract class Critter {
 		resolveConflicts();
 		for(Critter x: babies){
 			population.add(x);
-			babies.remove(x);
 		}
-		
+		babies.clear();
+		runawayList.clear();
+		for(int i = 0; i < Params.refresh_algae_count ; i++){
+			Critter.makeCritter("Algae");
+		}
 	}
 
 	public static void displayWorld() {
-
+		String[][] grid = new String[Params.world_height][Params.world_width];
+		for(Critter x : population){
+			grid[x.y_coord][x.x_coord] = x.toString();
+		}
+		//printing top border
+		System.out.print("+");
+		for(int i = 0; i < Params.world_width; i++){
+			System.out.print("-");
+		}
+		System.out.println("+");
+		//printing critters
+		for(int i = 0; i < Params.world_height; i++){
+			System.out.print("|");
+			for(int j = 0; j < Params.world_width; j++){
+				System.out.print(grid[i][j]);
+			}
+			System.out.println("|");
+		}
+		//printing bottom border
+		System.out.print("+");
+		for(int i = 0; i < Params.world_width; i++){
+			System.out.print("-");
+		}
+		System.out.println("+");
 	}
 
 	private static void resolveConflicts() {
