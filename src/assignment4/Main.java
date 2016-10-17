@@ -11,6 +11,7 @@
  * Fall 2016
  */
 package assignment4; // cannot be in default package
+import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 
@@ -39,8 +40,9 @@ public class Main {
      * Main method.
      * @param args args can be empty.  If not empty, provide two parameters -- the first is a file name, 
      * and the second is test (for test output, where all output to be directed to a String), or nothing.
+     * @throws InvalidCritterException 
      */
-    public static void main(String[] args) { 
+    public static void main(String[] args) throws InvalidCritterException { 
         if (args.length != 0) {
             try {
                 inputFile = args[0];
@@ -68,6 +70,56 @@ public class Main {
 
         /* Do not alter the code above for your submission. */
         /* Write your code below. */
+        boolean flag = true;
+        while(flag){
+        	String input = kb.next();
+        	if (input.equals("quit")){
+        		flag = false;
+        	}
+        	else if (input.equals("show")){
+        		Critter.displayWorld();
+        	}
+        	else if(input.equals("step")){
+        		if(kb.hasNextInt()){
+        			int k = kb.nextInt();
+        			for(int i = 0; i < k; i++){
+        				Critter.worldTimeStep();
+        			}	
+        		}
+        		else{
+        			Critter.worldTimeStep();
+        		}
+        	}
+        	else if(input.equals("seed")){
+        		if(kb.hasNextInt()){
+        			int k = kb.nextInt();
+        			Critter.setSeed(k);
+        		}
+        	}
+        	else if(input.equals("make")){
+        		if(kb.hasNext()){
+        			String critter = kb.next();
+        			if(kb.hasNextInt()){
+        				int k = kb.nextInt();
+        				for(int i = 0; i < k; i++){
+            				Critter.makeCritter(critter);
+            			}	
+        			}
+        			else{
+        				Critter.makeCritter(critter);
+        			}
+        		}
+        	}
+        	else if(input.equals("stats")){
+        		if(kb.hasNext()){
+        			String critter = kb.next();
+        			List<Critter> Clist = Critter.getInstances(critter);
+        			Critter.runStats(Clist);
+        			
+        		}
+        		
+        	}
+        }
         
         System.out.println("GLHF");
         
