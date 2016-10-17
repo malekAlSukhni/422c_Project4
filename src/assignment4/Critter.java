@@ -412,7 +412,10 @@ public abstract class Critter {
 		for(int i = 0; i < Params.world_height; i++){
 			System.out.print("|");
 			for(int j = 0; j < Params.world_width; j++){
-				System.out.print(grid[i][j]);
+				if(grid[i][j] == null){
+					System.out.print(" ");
+				}
+				else System.out.print(grid[i][j]);
 			}
 			System.out.println("|");
 		}

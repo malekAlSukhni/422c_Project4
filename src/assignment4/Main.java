@@ -121,10 +121,7 @@ public class Main {
         	}
         }
         
-        System.out.println("GLHF");
-        
         /* Write your code above */
         System.out.flush();
-
     }
 }
