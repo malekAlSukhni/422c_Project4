@@ -22,7 +22,7 @@ private int dir;
 		walk(dir);
 		
 		if (getEnergy() > Params.min_reproduce_energy + 40) {
-			Critter1 child = new Critter1();
+			Critter2 child = new Critter2();
 			reproduce(child, Critter.getRandomInt(8));
 		}
 		
