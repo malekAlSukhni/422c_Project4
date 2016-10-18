@@ -420,6 +420,7 @@ public abstract class Critter {
 		// executing all time steps for critters
 		for (Critter x : population) {
 			x.doTimeStep();
+			x.energy -= Params.rest_energy_cost;
 		}
 		resolveConflicts();
 		for (Critter x : babies) {
