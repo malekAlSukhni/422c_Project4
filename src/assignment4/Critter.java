@@ -421,6 +421,12 @@ public abstract class Critter {
 		for (Critter x : population) {
 			x.doTimeStep();
 		}
+		for (int i = 0; i < population.size(); i++){
+			if(population.get(i).energy <= 0){
+				population.remove(i);
+				i = 0;
+			}
+		}
 		resolveConflicts();
 		for (Critter x : babies) {
 			population.add(x);
