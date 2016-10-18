@@ -59,6 +59,8 @@ public abstract class Critter {
 	private int y_coord;
 
 	protected final void walk(int direction) {
+		int xcoordTemp = this.x_coord;
+		int ycoordTemp = this.y_coord;
 		if (!runawayList.contains(this)) {
 			switch (direction) {
 			// case 0 moving to the right
@@ -70,13 +72,19 @@ public abstract class Critter {
 			case 1:
 				x_coord += 1;
 				x_coord = x_coord % Params.world_width;
-				y_coord += 1;
-				y_coord = y_coord % Params.world_height;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 1;
+				} else {
+					y_coord -= 1;
+				}
 				break;
 			// case 2 moving up
 			case 2:
-				y_coord += 1;
-				y_coord = y_coord % Params.world_height;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 1;
+				} else {
+					y_coord -= 1;
+				}
 				break;
 			// case 3 moving up and to the left
 			case 3:
@@ -85,8 +93,11 @@ public abstract class Critter {
 				} else {
 					x_coord -= 1;
 				}
-				y_coord += 1;
-				y_coord = y_coord % Params.world_height;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 1;
+				} else {
+					y_coord -= 1;
+				}
 				break;
 			// case 4 moving left
 			case 4:
@@ -103,30 +114,28 @@ public abstract class Critter {
 				} else {
 					x_coord -= 1;
 				}
-				if (y_coord == 0) {
-					y_coord = Params.world_height - 1;
-				} else {
-					y_coord -= 1;
-				}
+				y_coord += 1;
+				y_coord = y_coord % Params.world_height;
 				break;
 			// case 6 moving down
 			case 6:
-				if (y_coord == 0) {
-					y_coord = Params.world_height - 1;
-				} else {
-					y_coord -= 1;
-				}
+				y_coord += 1;
+				y_coord = y_coord % Params.world_height;
 				break;
 			// case 7 moving down and to the right
 			case 7:
 				x_coord += 1;
 				x_coord = x_coord % Params.world_width;
-				if (y_coord == 0) {
-					y_coord = Params.world_height - 1;
-				} else {
-					y_coord -= 1;
-				}
+				y_coord += 1;
+				y_coord = y_coord % Params.world_height;
 				break;
+			}
+			for (Critter x : population) {
+				if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
+					this.x_coord = xcoordTemp;
+					this.y_coord = ycoordTemp;
+					break;
+				}
 			}
 			runawayList.add(this);
 		}
@@ -134,6 +143,8 @@ public abstract class Critter {
 	}
 
 	protected final void run(int direction) {
+		int xcoordTemp = this.x_coord;
+		int ycoordTemp = this.y_coord;
 		if (!runawayList.contains(this)) {
 			switch (direction) {
 			// case 0 moving to the right
@@ -145,13 +156,27 @@ public abstract class Critter {
 			case 1:
 				x_coord += 2;
 				x_coord = x_coord % Params.world_width;
-				y_coord += 2;
-				y_coord = y_coord % Params.world_height;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 2;
+				} else {
+					if (y_coord == 1) {
+						y_coord = Params.world_height - 1;
+					} else {
+						y_coord -= 2;
+					}
+				}
 				break;
 			// case 2 moving up
 			case 2:
-				y_coord += 2;
-				y_coord = y_coord % Params.world_height;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 2;
+				} else {
+					if (y_coord == 1) {
+						y_coord = Params.world_height - 1;
+					} else {
+						y_coord -= 2;
+					}
+				}
 				break;
 			// case 3 moving up and to the left
 			case 3:
@@ -164,8 +189,15 @@ public abstract class Critter {
 						x_coord -= 2;
 					}
 				}
-				y_coord += 2;
-				y_coord = y_coord % Params.world_height;
+				if (y_coord == 0) {
+					y_coord = Params.world_height - 2;
+				} else {
+					if (y_coord == 1) {
+						y_coord = Params.world_height - 1;
+					} else {
+						y_coord -= 2;
+					}
+				}
 				break;
 			// case 4 moving left
 			case 4:
@@ -190,42 +222,28 @@ public abstract class Critter {
 						x_coord -= 2;
 					}
 				}
-				if (y_coord == 0) {
-					y_coord = Params.world_height - 2;
-				} else {
-					if (y_coord == 1) {
-						y_coord = Params.world_height - 1;
-					} else {
-						y_coord -= 2;
-					}
-				}
+				y_coord += 2;
+				y_coord = y_coord % Params.world_height;
 				break;
 			// case 6 moving down
 			case 6:
-				if (y_coord == 0) {
-					y_coord = Params.world_height - 2;
-				} else {
-					if (y_coord == 1) {
-						y_coord = Params.world_height - 1;
-					} else {
-						y_coord -= 2;
-					}
-				}
+				y_coord += 2;
+				y_coord = y_coord % Params.world_height;
 				break;
 			// case 7 moving down and to the right
 			case 7:
 				x_coord += 2;
 				x_coord = x_coord % Params.world_width;
-				if (y_coord == 0) {
-					y_coord = Params.world_height - 2;
-				} else {
-					if (y_coord == 1) {
-						y_coord = Params.world_height - 1;
-					} else {
-						y_coord -= 2;
-					}
-				}
+				y_coord += 2;
+				y_coord = y_coord % Params.world_height;
 				break;
+			}
+			for (Critter x : population) {
+				if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
+					this.x_coord = xcoordTemp;
+					this.y_coord = ycoordTemp;
+					break;
+				}
 			}
 			runawayList.add(this);
 		}
@@ -237,8 +255,7 @@ public abstract class Critter {
 			offspring.energy = this.energy / 2;
 			if (this.energy % 2 == 0) {
 				this.energy = this.energy / 2;
-			} 
-			else {
+			} else {
 				this.energy = offspring.energy + 1;
 			}
 			offspring.x_coord = this.x_coord;
@@ -247,7 +264,7 @@ public abstract class Critter {
 			offspring.energy += Params.walk_energy_cost;
 			babies.add(offspring);
 		}
-		
+
 	}
 
 	public abstract void doTimeStep();
@@ -268,11 +285,19 @@ public abstract class Critter {
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
 		try {
 			Critter test;
-			Class c = Class.forName(critter_class_name);
+			Class c = Class.forName(Critter.myPackage + "." + critter_class_name);
 			test = (Critter) c.newInstance();
 			test.energy = Params.start_energy;
-			test.x_coord = getRandomInt(Params.world_width - 1);
-			test.y_coord = getRandomInt(Params.world_height - 1);
+			if (Params.world_width > 1) {
+				test.x_coord = getRandomInt(Params.world_width - 1);
+			} else {
+				test.x_coord = 0;
+			}
+			if (Params.world_height > 1) {
+				test.y_coord = getRandomInt(Params.world_height - 1);
+			} else {
+				test.y_coord = 0;
+			}
 			population.add(test);
 		} catch (Exception e) {
 			throw new InvalidCritterException(critter_class_name);
@@ -290,6 +315,15 @@ public abstract class Critter {
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
 		List<Critter> result = new java.util.ArrayList<Critter>();
+		for (Critter x : population) {
+			try {
+				if (x.getClass().equals(Class.forName(Critter.myPackage + "." + critter_class_name))) {
+					result.add(x);
+				}
+			} catch (ClassNotFoundException e) {
+				throw new InvalidCritterException(critter_class_name);
+			}
+		}
 		return result;
 	}
 
@@ -387,41 +421,41 @@ public abstract class Critter {
 			x.doTimeStep();
 		}
 		resolveConflicts();
-		for(Critter x: babies){
+		for (Critter x : babies) {
 			population.add(x);
 		}
 		babies.clear();
 		runawayList.clear();
-		for(int i = 0; i < Params.refresh_algae_count ; i++){
+		for (int i = 0; i < Params.refresh_algae_count; i++) {
 			Critter.makeCritter("Algae");
 		}
 	}
 
 	public static void displayWorld() {
 		String[][] grid = new String[Params.world_height][Params.world_width];
-		for(Critter x : population){
+		for (Critter x : population) {
 			grid[x.y_coord][x.x_coord] = x.toString();
 		}
-		//printing top border
+		// printing top border
 		System.out.print("+");
-		for(int i = 0; i < Params.world_width; i++){
+		for (int i = 0; i < Params.world_width; i++) {
 			System.out.print("-");
 		}
 		System.out.println("+");
-		//printing critters
-		for(int i = 0; i < Params.world_height; i++){
+		// printing critters
+		for (int i = 0; i < Params.world_height; i++) {
 			System.out.print("|");
-			for(int j = 0; j < Params.world_width; j++){
-				if(grid[i][j] == null){
+			for (int j = 0; j < Params.world_width; j++) {
+				if (grid[i][j] == null) {
 					System.out.print(" ");
-				}
-				else System.out.print(grid[i][j]);
+				} else
+					System.out.print(grid[i][j]);
 			}
 			System.out.println("|");
 		}
-		//printing bottom border
+		// printing bottom border
 		System.out.print("+");
-		for(int i = 0; i < Params.world_width; i++){
+		for (int i = 0; i < Params.world_width; i++) {
 			System.out.print("-");
 		}
 		System.out.println("+");
@@ -456,31 +490,6 @@ public abstract class Critter {
 						int fightRoll2 = 0;
 						// neither want to fight
 						if (!fight1 && !fight2) {
-							int xcoordTemp, ycoordTemp;
-							if (!runawayList.contains(critter1)) {
-								xcoordTemp = critter1.x_coord;
-								ycoordTemp = critter1.y_coord;
-								critter1.run(getRandomInt(7));
-								for (Critter x : population) {
-									if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
-										critter1.x_coord = xcoordTemp;
-										critter1.y_coord = ycoordTemp;
-										break;
-									}
-								}
-							}
-							if (!runawayList.contains(critter2)) {
-								xcoordTemp = critter2.x_coord;
-								ycoordTemp = critter2.y_coord;
-								critter2.run(getRandomInt(7));
-								for (Critter x : population) {
-									if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
-										critter2.x_coord = xcoordTemp;
-										critter2.y_coord = ycoordTemp;
-										break;
-									}
-								}
-							}
 							if (critter1.x_coord == critter2.x_coord && critter1.y_coord == critter2.y_coord) {
 								fight1 = true;
 							}
