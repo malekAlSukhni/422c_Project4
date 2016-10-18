@@ -6,29 +6,27 @@ private int dir;
 	@Override
 	public String toString() { return "2"; }
 	public Critter2(){
-		dir = Critter.getRandomInt(8);
+		dir = Critter.getRandomInt(7);
 	}
 	
 	
 	public boolean fight(String not_used) { 
-		if(not_used.equals("2")){
+		if(not_used.equals("@")){
 			return true;
 		}
-		return false; }
+		run(dir);
+		return false; 
+		}
 	
 	@Override
 	public void doTimeStep() {
-		/* take one step forward */
-		walk(dir);
 		
 		if (getEnergy() > Params.min_reproduce_energy + 40) {
 			Critter2 child = new Critter2();
-			reproduce(child, Critter.getRandomInt(8));
+			reproduce(child, Critter.getRandomInt(7));
 		}
-		
-		
-		
-		dir = getRandomInt(8);
+
+		dir = getRandomInt(7);
 	}
 
 }
