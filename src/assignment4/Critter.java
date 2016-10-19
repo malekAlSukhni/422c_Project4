@@ -25,6 +25,8 @@ public abstract class Critter {
 	private static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static List<Critter> runawayList = new java.util.ArrayList<Critter>();
+	private static boolean baby = false;
+	private static boolean fight = false;
 
 	// Gets the package name. This assumes that Critter and its subclasses are
 	// all in the same package.
@@ -131,14 +133,18 @@ public abstract class Critter {
 				y_coord = y_coord % Params.world_height;
 				break;
 			}
-			for (Critter x : population) {
-				if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
-					this.x_coord = xcoordTemp;
-					this.y_coord = ycoordTemp;
-					break;
+			if (!baby && fight) {
+				for (Critter x : population) {
+					if (x.x_coord == this.x_coord && x.y_coord == this.y_coord) {
+						if (this != x) {
+							this.x_coord = xcoordTemp;
+							this.y_coord = ycoordTemp;
+							break;
+						}
+					}
 				}
+				runawayList.add(this);
 			}
-			runawayList.add(this);
 		}
 		energy -= Params.walk_energy_cost;
 	}
@@ -239,16 +245,20 @@ public abstract class Critter {
 				y_coord = y_coord % Params.world_height;
 				break;
 			}
-			for (Critter x : population) {
-				if (x.x_coord == xcoordTemp && x.y_coord == ycoordTemp) {
-					this.x_coord = xcoordTemp;
-					this.y_coord = ycoordTemp;
-					break;
+			if (!baby && fight) {
+				for (Critter x : population) {
+					if (x.x_coord == this.x_coord && x.y_coord == this.y_coord) {
+						if (this != x) {
+							this.x_coord = xcoordTemp;
+							this.y_coord = ycoordTemp;
+							break;
+						}
+					}
 				}
+				runawayList.add(this);
 			}
-			runawayList.add(this);
+			energy -= Params.run_energy_cost;
 		}
-		energy -= Params.run_energy_cost;
 	}
 
 	protected final void reproduce(Critter offspring, int direction) {
@@ -261,7 +271,9 @@ public abstract class Critter {
 			}
 			offspring.x_coord = this.x_coord;
 			offspring.y_coord = this.y_coord;
+			baby = true;
 			offspring.walk(direction);
+			baby = false;
 			offspring.energy += Params.walk_energy_cost;
 			babies.add(offspring);
 		}
@@ -422,8 +434,8 @@ public abstract class Critter {
 			x.doTimeStep();
 			x.energy -= Params.rest_energy_cost;
 		}
-		for (int i = 0; i < population.size(); i++){
-			if(population.get(i).energy <= 0){
+		for (int i = 0; i < population.size(); i++) {
+			if (population.get(i).energy <= 0) {
 				population.remove(i);
 				i = 0;
 			}
@@ -434,9 +446,11 @@ public abstract class Critter {
 		}
 		babies.clear();
 		runawayList.clear();
+
 		for (int i = 0; i < Params.refresh_algae_count; i++) {
 			Critter.makeCritter("Algae");
 		}
+
 	}
 
 	public static void displayWorld() {
@@ -470,7 +484,7 @@ public abstract class Critter {
 	}
 
 	private static void resolveConflicts() {
-
+		fight = true;
 		for (int index = 0; index < population.size(); index++) {
 			if (population.get(index).energy <= 0) {
 				// if this critter is dead then check the next
@@ -540,5 +554,6 @@ public abstract class Critter {
 				}
 			}
 		}
+		fight = false;
 	}
 }
