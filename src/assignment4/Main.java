@@ -98,22 +98,26 @@ public class Main {
 				} else {
 					System.out.println("error processing: " + input);
 				}
-			} else if ((fullInput.length == 1 || fullInput.length == 2) && fullInput[0].equals("step")) {
-				if (fullInput.length == 2) {
-					try {
-						int k = Integer.parseInt(fullInput[1]);
-						for (int i = 0; i < k; i++) {
-							Critter.worldTimeStep();
+			} else if (fullInput[0].equals("step")) {
+				if ((fullInput.length == 1 || fullInput.length == 2)) {
+					if (fullInput.length == 2) {
+						try {
+							int k = Integer.parseInt(fullInput[1]);
+							for (int i = 0; i < k; i++) {
+								Critter.worldTimeStep();
+							}
+						} catch (Exception e) {
+							System.out.println("error processing: " + input);
 						}
-					} catch (Exception e) {
-						System.out.println("error processing: " + input);
+					} else {
+						try {
+							Critter.worldTimeStep();
+						} catch (InvalidCritterException e) {
+							e.printStackTrace();
+						}
 					}
 				} else {
-					try {
-						Critter.worldTimeStep();
-					} catch (InvalidCritterException e) {
-						e.printStackTrace();
-					}
+					System.out.println("error processing: " + input);
 				}
 			} else if (fullInput[0].equals("seed")) {
 				if (fullInput.length == 2) {
@@ -144,7 +148,7 @@ public class Main {
 				} else {
 					System.out.println("error processing: " + input);
 				}
-			} else if (fullInput.length == 2 && fullInput[0].equals("stats")) {
+			} else if (fullInput[0].equals("stats")) {
 				if (fullInput.length == 2) {
 					try {
 						Class<?> statter = Class.forName(myPackage + "." + fullInput[1]);
