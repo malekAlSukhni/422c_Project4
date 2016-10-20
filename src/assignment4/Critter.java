@@ -58,7 +58,15 @@ public abstract class Critter {
 
 	private int x_coord;
 	private int y_coord;
-
+	
+	/**
+	 * This method moves the critters one space in a direction 
+	 * @param direction is a number between 0-7 
+	 * direction indicates which way the critters will move 
+	 * check each case and adjust coordinates accordingly 
+	 * adds them to a list saying they have moved 
+	 * subtracts enerfy for walking 
+	 */
 	protected final void walk(int direction) {
 		int xcoordTemp = this.x_coord;
 		int ycoordTemp = this.y_coord;
@@ -142,6 +150,13 @@ public abstract class Critter {
 		}
 		energy -= Params.walk_energy_cost;
 	}
+	/**
+	 * This method moves the critters two space in a direction 
+	 * @param direction is a number between 0-7 
+	 * direction indicates which way the critters will move 
+	 * check each case and adjust coordinates accordingly 
+	 * adds them to a list indicating they have moved this time step
+	 */
 
 	protected final void run(int direction) {
 		int xcoordTemp = this.x_coord;
@@ -250,6 +265,13 @@ public abstract class Critter {
 		}
 		energy -= Params.run_energy_cost;
 	}
+	/**
+	 * checks if parent Critter can make children
+	 * creates a child halving parents energy(parent round up, child rounds down)
+	 * @param offspring, the child of the Critter (same class type)
+	 * @param direction, the direction the child will move after being born 
+	 * add child to a list of babies
+	 */
 
 	protected final void reproduce(Critter offspring, int direction) {
 		if (this.energy >= Params.min_reproduce_energy) {
@@ -415,7 +437,16 @@ public abstract class Critter {
 	public static void clearWorld() {
 		population.clear();
 	}
-
+	/**
+	 * first executes each critters time step in the population, subtracting necessary energy 
+	 * next removes any critters that have died from moving 
+	 * then resolves the conflicts for critters in the same position 
+	 * adds babies to real world 
+	 * clears babies list 
+	 * clears runaway list 
+	 * adds the necessary amount of Algae 
+	 * @throws InvalidCritterException
+	 */
 	public static void worldTimeStep() throws InvalidCritterException {
 		// executing all time steps for critters
 		for (Critter x : population) {
@@ -438,7 +469,11 @@ public abstract class Critter {
 			Critter.makeCritter("Algae");
 		}
 	}
-
+	/**
+	 * Prints the border specified in Params.java 
+	 * A matrix is used to keep track of the positions of critters and blank space 
+	 * checks for white space first, else prints critter to String character
+	 */
 	public static void displayWorld() {
 		String[][] grid = new String[Params.world_height][Params.world_width];
 		for (Critter x : population) {
