@@ -51,7 +51,7 @@ public class Main {
 	 *            where all output to be directed to a String), or nothing.
 	 * @throws InvalidCritterException
 	 */
-	public static void main(String[] args) throws InvalidCritterException {
+	public static void main(String[] args) {
 		if (args.length != 0) {
 			try {
 				inputFile = args[0];
@@ -86,10 +86,18 @@ public class Main {
 			System.out.print("critter>");
 			String input = kb.nextLine();
 			String[] fullInput = input.split(" ");
-			if (fullInput.length == 1 && fullInput[0].equals("quit")) {
-				flag = false;
-			} else if (fullInput.length == 1 && fullInput[0].equals("show")) {
-				Critter.displayWorld();
+			if (fullInput[0].equals("quit")) {
+				if (fullInput.length == 1) {
+					flag = false;
+				} else {
+					System.out.println("error processing: " + input);
+				}
+			} else if (fullInput[0].equals("show")) {
+				if (fullInput.length == 1) {
+					Critter.displayWorld();
+				} else {
+					System.out.println("error processing: " + input);
+				}
 			} else if ((fullInput.length == 1 || fullInput.length == 2) && fullInput[0].equals("step")) {
 				if (fullInput.length == 2) {
 					try {
@@ -101,35 +109,51 @@ public class Main {
 						System.out.println("error processing: " + input);
 					}
 				} else {
-					Critter.worldTimeStep();
+					try {
+						Critter.worldTimeStep();
+					} catch (InvalidCritterException e) {
+						e.printStackTrace();
+					}
 				}
-			} else if (fullInput.length == 2 && fullInput[0].equals("seed")) {
-				try {
-					int k = Integer.parseInt(fullInput[1]);
-					Critter.setSeed(k);
-				} catch (Exception e) {
+			} else if (fullInput[0].equals("seed")) {
+				if (fullInput.length == 2) {
+					try {
+						int k = Integer.parseInt(fullInput[1]);
+						Critter.setSeed(k);
+					} catch (Exception e) {
+						System.out.println("error processing: " + input);
+					}
+				} else {
 					System.out.println("error processing: " + input);
 				}
-			} else if ((fullInput.length == 2 || fullInput.length == 3) && fullInput[0].equals("make")) {
-				String critter = fullInput[1];
-				try {
-					if (fullInput.length == 3) {
-						int k = Integer.parseInt(fullInput[2]);
-						for (int i = 0; i < k; i++) {
+			} else if (fullInput[0].equals("make")) {
+				if ((fullInput.length == 2 || fullInput.length == 3)) {
+					String critter = fullInput[1];
+					try {
+						if (fullInput.length == 3) {
+							int k = Integer.parseInt(fullInput[2]);
+							for (int i = 0; i < k; i++) {
+								Critter.makeCritter(critter);
+							}
+						} else {
 							Critter.makeCritter(critter);
 						}
-					} else {
-						Critter.makeCritter(critter);
+					} catch (Exception e) {
+						System.out.println("error processing: " + input);
 					}
-				} catch (Exception e) {
+				} else {
 					System.out.println("error processing: " + input);
 				}
 			} else if (fullInput.length == 2 && fullInput[0].equals("stats")) {
-				try {
-					Class<?> statter = Class.forName(myPackage + "." + fullInput[1]);
-					Method method = statter.getMethod("runStats", List.class);
-					method.invoke(null, Critter.getInstances(fullInput[1]));
-				} catch (Exception e) {
+				if (fullInput.length == 2) {
+					try {
+						Class<?> statter = Class.forName(myPackage + "." + fullInput[1]);
+						Method method = statter.getMethod("runStats", List.class);
+						method.invoke(null, Critter.getInstances(fullInput[1]));
+					} catch (Exception e) {
+						System.out.println("error processing: " + input);
+					}
+				} else {
 					System.out.println("error processing: " + input);
 				}
 			} else {
