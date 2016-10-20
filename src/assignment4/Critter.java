@@ -331,12 +331,12 @@ public abstract class Critter {
 			test = (Critter) c.newInstance();
 			test.energy = Params.start_energy;
 			if (Params.world_width > 1) {
-				test.x_coord = getRandomInt(Params.world_width - 1);
+				test.x_coord = getRandomInt(Params.world_width);
 			} else {
 				test.x_coord = 0;
 			}
 			if (Params.world_height > 1) {
-				test.y_coord = getRandomInt(Params.world_height - 1);
+				test.y_coord = getRandomInt(Params.world_height);
 			} else {
 				test.y_coord = 0;
 			}

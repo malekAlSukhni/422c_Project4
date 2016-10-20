@@ -6,7 +6,7 @@ private int dir;
 	@Override
 	public String toString() { return "1"; }
 	public Critter1(){
-		dir = Critter.getRandomInt(7);
+		dir = Critter.getRandomInt(8);
 	}
 	
 	

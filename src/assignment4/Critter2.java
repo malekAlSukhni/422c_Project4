@@ -27,7 +27,7 @@ public class Critter2 extends Critter {
 			reproduce(new Critter2(), Critter.getRandomInt(7));
 		}
 
-		dir = getRandomInt(7);
+		dir = getRandomInt(8);
 	}
 
 }

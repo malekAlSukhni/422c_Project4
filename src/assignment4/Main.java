@@ -94,7 +94,7 @@ public class Main {
 				}
 			} else if (fullInput[0].equals("show")) {
 				if (fullInput.length == 1) {
-					Critter.displayWorld();
+					Critter.displayWorld();	
 				} else {
 					System.out.println("error processing: " + input);
 				}

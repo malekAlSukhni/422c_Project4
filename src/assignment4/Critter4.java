@@ -10,7 +10,7 @@ public class Critter4 extends Critter{
 	@Override
 	public boolean fight(String oponent) {
 		while(this.getEnergy() >= Params.min_reproduce_energy){
-			this.reproduce(new Critter4(), Critter.getRandomInt(7));
+			this.reproduce(new Critter4(), Critter.getRandomInt(8));
 		}
 		return false;
 	}
