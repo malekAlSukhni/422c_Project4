@@ -84,7 +84,7 @@ public class Main {
 		boolean flag = true;
 		while (flag) {
 			System.out.print("critter>");
-			String input = kb.nextLine();
+			String input = kb.nextLine().trim();
 			String[] fullInput = input.split(" ");
 			if (fullInput[0].equals("quit")) {
 				if (fullInput.length == 1) {
